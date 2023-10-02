@@ -1,0 +1,115 @@
+/* CREATE DATABASE's TABLES  */
+
+CREATE TABLE employees (
+
+    "employee_id"    INTEGER,
+    "first_name"     VARCHAR(10),
+    "last_name"      VARCHAR(10)
+    );  
+
+CREATE TABLE visitors (
+"visitor_id"    INTEGER,
+"first_name"    VARCHAR(10),
+"last_name"    VARCHAR(10),
+"original_country"    VARCHAR(10)
+);
+
+CREATE TABLE suspects(
+    "suspect_id"    INTEGER,
+    "type"    VARCHAR(10),
+    "type_id"    INTEGER,
+    "reason" VARCHAR(200)
+    );
+    
+
+CREATE TABLE clues(
+    "clue_id"    INTEGER,
+    "description" VARCHAR(200),
+    "found_by"    INTEGER
+    );
+
+
+/* INSERT VALUES TO TABLES  */
+
+INSERT INTO visitors 
+(
+    visitor_id,
+    first_name,
+    last_name,
+    original_country 
+)
+VALUES
+(
+'1',
+'mickael',
+'brown',
+'USA'),
+
+('2',
+'Sarah',
+'Green',
+'UK'),
+
+('3',
+'Felix',
+'Gray',
+'Germany');
+
+/* Modify employees tables */
+ALTER TABLE employees 
+ADD position VARCHAR(10);
+INSERT INTO employees(
+    employee_id,
+    first_name,
+    last_name,
+    position
+) 
+VALUES
+("1",
+"John",
+"Doe",
+"Security"),
+("2",
+"Emily",
+"Smith",
+"Curator"),
+("3",
+"Alan",
+"White",
+"Guide");
+
+INSERT INTO suspects(
+suspect_id,
+type,
+type_id,
+reason)
+VALUES
+(
+"1",
+"Visitor",
+"2",
+"Found near crime scene"
+),
+("2",
+"Employee",
+"1",
+"Previous theft record"
+);
+
+
+INSERT INTO clues
+(
+clue_id,
+description,
+found_by
+)
+VALUES
+("1",
+"A torn piece of paper",
+"3"
+),
+("2",
+"A silver pendant",
+"1");
+
+SELECT* FROM clues;

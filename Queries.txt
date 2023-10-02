@@ -1,0 +1,84 @@
+SELECT first_name,
+       last_name,
+       reason
+  FROM suspects AS s
+       JOIN
+       visitors AS v ON s.suspect_id = v.visitor_id
+ WHERE S.type = "Visitor"
+UNION
+SELECT first_name,
+       last_name,
+       reason
+  FROM suspects AS s
+       JOIN
+       employees AS e ON s.suspect_id = e.employee_id
+ WHERE S.type = "Employee";-- Find out the total number of visitors from each country on the day of the theft
+
+SELECT original_country,
+       count(visitor_id) 
+  FROM visitors
+ GROUP BY (original_country);-- Identify which employee found the most clues
+
+SELECT e.first_name,
+       e.last_name,
+       COUNT(c.found_by) AS total_clues
+  FROM clues AS c
+       JOIN
+       employees AS e ON e.employee_id = c.found_by
+ GROUP BY found_by
+ ORDER BY total_clues DESC
+ LIMIT 1;-- List the clues found by John Doe
+
+SELECT e.first_name,
+       e.last_name,
+       c.description
+  FROM clues AS c
+       JOIN
+       employees AS e ON e.employee_id = c.found_by
+ WHERE e.first_name = 'John' AND 
+       e.last_name = 'Doe';-- Which position in the museum had the most employees listed as suspects
+
+SELECT e.position,
+       COUNT(e.position) AS number_employees
+  FROM suspects AS s
+       JOIN
+       employees AS e ON e.employee_id = s.suspect_id
+ WHERE type = 'Employee'
+ GROUP BY (e.position) 
+ ORDER BY number_employees DESC;-- Get a list of all employees who haven’t found any clues
+
+SELECT e.employee_id,
+       e.first_name,
+       e.last_name
+  FROM employees AS e
+ WHERE e.employee_id NOT IN (
+           SELECT c.found_by
+             FROM clues AS c
+       );-- Were there more visitor suspects or employee suspects?
+
+SELECT type,
+       COUNT(type) AS number_suspects
+  FROM suspects
+ GROUP BY type
+ ORDER BY number_suspects DESC
+ LIMIT 1;-- Identify the country of origin of all visitor suspects.
+
+SELECT v.visitor_id,
+       v.original_country
+  FROM visitors AS v
+       JOIN
+       suspects AS s ON v.visitor_id = s.suspect_id
+ WHERE LOWER(s.type) = 'visitor';-- List the reasons why employees were suspected
+
+SELECT e.employee_id,
+       s.reason
+  FROM employees AS e
+       JOIN
+       suspects AS s ON e.employee_id = s.suspect_id
+ WHERE LOWER(s.type) = 'employee';-- Which clues were found by employees holding the position of "Guide"
+
+SELECT c.description
+  FROM employees AS e
+       JOIN
+       clues AS c ON e.employee_id = c.found_by
+ WHERE LOWER(e.position) = 'guide';
